@@ -4,13 +4,23 @@ var RADIUS  = 8;
 var MARGIN_TOP = 120;
 var MARGIN_LEFT = 30;
 
-const endTime = new Date(2016,4,19,0,0,0);
+//var endTime = new Date(2016,4,19,0,0,0);  //设置指定截止时间
+var endTime = new Date;
+endTime.setTime(endTime.getTime()+3600000);  //设置1小时倒计时
 var curShowTimeSeconds = 0;
 
 var balls = [];  //存放小球的数组
 var colors = [ "#33b5e5","#0099cc","#aa66cc","#9933cc","#669900","#ffbb33","#ff8800","#ff4444","#cc0000"];
 
 window.onload = function(){
+
+	//屏幕自适应
+	WINDOW_WIDTH = document.body.clientWidth;
+	WINDOW_HEIGHT = document.body.clientHeight;
+	MARGIN_LEFT = Math.round(WINDOW_WIDTH/10);
+	MARGIN_TOP = Math.round(WINDOW_HEIGHT/5);
+	RADIUS = Math.round(WINDOW_WIDTH*4/5/108)-1; 
+
 	var canvas = document.getElementById('canvas');
 	var context = canvas.getContext("2d");
 
@@ -34,6 +44,14 @@ function getCurrentShowTimeSeconds(){
 	ret = Math.round(ret/1000);
 	return ret>=0?ret:0;
 }
+
+
+//实现时钟效果
+// function getCurrentShowTimeSeconds(){
+// 	var curTime = new Date();
+// 	var ret = curTime.getHours()*3600+curTime.getMinutes()*60+curTime.getSeconds();
+// 	return ret;
+// }
 
 function update(){
 	var nextShowTimeSeconds = getCurrentShowTimeSeconds();
@@ -72,6 +90,7 @@ function update(){
 	}
 
 	updateBalls();
+	//console.log(balls.length);
 }
 
 //更新所有小球的状态
@@ -84,6 +103,15 @@ function updateBalls(){
 			balls[i].vy = -0.75*balls[i].vy;
 		}
 	}
+
+	//删除屏幕外的小球
+	var cnt = 0;
+	for(var i = 0; i < balls.length; i++)
+		if(balls[i].x+RADIUS>0 && balls[i].x-RADIUS < WINDOW_WIDTH)
+			balls[cnt++] = balls[i];   //把在屏幕范围内的小球都移动到数组前面
+
+	while(balls.length > cnt)
+		balls.pop();
 }
 
 //对发生改变的数字增加小球 
