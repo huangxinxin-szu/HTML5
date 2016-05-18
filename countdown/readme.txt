@@ -1,1 +1,2 @@
-在countdown.js的第7行const endTime = new Date(2016,4,19,0,0,0)中设置截止时间
+1.在countdown.js的第7行const endTime = new Date(2016,4,19,0,0,0)中设置截止时间，同时需取消该行注释并注释掉第8和9行
+2.若要将倒计时效果改成时钟效果，注释掉41-46行并取消50-54行注释
